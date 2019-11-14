@@ -1,0 +1,29 @@
+---
+- name: "configure device"
+  hosts: labjunos
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+
+  tasks:
+    - name: "Configure op script"
+      juniper_junos_config:
+        config_mode: "private"
+        load: "set"
+        diff: yes
+        lines:
+          - set firewall policer Police-IPv4-Client-{{ item.clientname }} if-exceeding bandwidth-limit {{ item.bandwidth }}m
+          - set firewall policer Police-IPv4-Client-{{ item.clientname }} if-exceeding burst-size-limit {{ item.burstlimit }}m
+          - set firewall policer Police-IPv4-Client-{{ item.clientname }} then discard
+      with_items:
+        - { clientname: test1, bandwidth: 100, burstlimit: 1 }
+        - { clientname: test2, bandwidth: 200, burstlimit: 1 }
+        
+      register: config_results
+
+    - name: "Print the config changes"
+      debug:
+        var: config_results
+
+
