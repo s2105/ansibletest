@@ -12,10 +12,9 @@
         config_mode: "private"
         load: "set"
         lines:
-          - set firewall policer Police-IPv4-Client-{{ item.value.clientname }} if-exceeding bandwidth-limit {{ item.value.bandwidth }}m
-          - set firewall policer Police-IPv4-Client-{{ item.value.clientname }} if-exceeding burst-size-limit {{ item.value.burstlimit }}m
-          - set firewall policer Police-IPv4-Client-{{ item.value.clientname }} then discard
-        loop: "{{ lookup('dict', client) }}"
+          - set firewall policer Police-IPv4-Client-{{ clientname }} if-exceeding bandwidth-limit {{ bandwidth }}m
+          - set firewall policer Police-IPv4-Client-{{ clientname }} if-exceeding burst-size-limit {{ burstlimit }}m
+          - set firewall policer Police-IPv4-Client-{{ clientname }} then discard
     - name: "Print the config changes"
       debug: 
         var: {response.diff_lines}
