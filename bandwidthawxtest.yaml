@@ -17,4 +17,4 @@
           - set firewall policer Police-IPv4-Client-{{ clientname }} then discard
     - name: "Print the config changes"
       debug: 
-        var: {response.diff_lines}
+        var: config_results
